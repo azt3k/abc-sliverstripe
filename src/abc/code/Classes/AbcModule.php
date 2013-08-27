@@ -48,10 +48,11 @@ class AbcModule {
 				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/event.drag/jquery.event.drag.js');
 				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/event.drag/jquery.event.drag.live.js');	
 				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jquery.drag.touch.js');				
-				break
+				break;
 
 			default:
-				throw new Exception('Invalid module requested')
+				throw new Exception('Invalid module requested');
+				break;
 		}
 	}
 }
