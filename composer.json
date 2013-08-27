@@ -1,0 +1,16 @@
+{
+    "name": "azt3k/abc-silverstripe",
+    "description": "Library that adds some useful functionality to Silverstripe",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Aaron Latham-Ilari",
+            "email": "abcdigital@abcdigital.co.nz"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "silverstripe/framework" : "3.1.*@dev",
+        "silverstripe/cms"       : "3.1.*@dev"
+    }
+}
