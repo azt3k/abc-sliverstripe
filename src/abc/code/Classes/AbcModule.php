@@ -24,6 +24,18 @@ class AbcModule {
 				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/mobile/jquery.mobile-1.3.2.min.js');
 				break;
 
+			case 'avgrund':
+
+				// dependencies
+				self::load('jquery');			
+
+				// loaders / blockers
+				Requirements::javascript(ABC_PATH."/javascript/library/jQuery/avgrund/jquery.avgrund.js");
+				Requirements::css(ABC_PATH."/javascript/library/jQuery/avgrund/argvund.css");
+				LeftAndMainHelper::require_block(ABC_PATH."/javascript/library/jQuery/avgrund/jquery.avgrund.js");
+				LeftAndMainHelper::require_block(ABC_PATH."/javascript/library/jQuery/avgrund/argvund.css");
+				break;				
+
 			case 'bootstrap':
 
 				// dependencies
@@ -54,5 +66,9 @@ class AbcModule {
 				throw new Exception('Invalid module requested');
 				break;
 		}
+	}
+
+	public static function combine() {
+		
 	}
 }

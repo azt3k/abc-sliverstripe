@@ -15,12 +15,12 @@ class AbcFileExtension extends DataExtension {
 		return self::$allowed_extensions;
 	}
 
-	public function getAddFileMimeType(){
+	public function getMimeType(){
 		$return = explode('-', $this->owner->getFileType());
 		return $return[0];
 	}
 
-	public function getAddFileFileSize(){
+	public function getFileSize(){
 		return $this->owner->getSize();
 	}
 	
