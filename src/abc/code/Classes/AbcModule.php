@@ -37,7 +37,7 @@ class AbcModule {
 			case 'slidatron':
 
 				// dependencies
-				self::load('jquery.mobile');
+				self::load('jquery');
 
 				// loaders / blockers
 				Requirements::javascript(ABC_PATH.'/javascript/library/jQuery/event.drag/jquery.event.drag.js');
