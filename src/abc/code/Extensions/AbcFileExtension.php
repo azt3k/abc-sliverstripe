@@ -1,6 +1,6 @@
 <?php
 
-class AbcFileExtension extends File {
+class AbcFileExtension extends DataExtension {
 	
 	private static $allowed_extensions = array(
 		'','ace','arc','arj','asf','au','avi','bmp','bz2','cab','cda','css','csv','dmg','doc','docx',
