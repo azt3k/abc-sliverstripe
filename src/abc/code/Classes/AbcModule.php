@@ -20,8 +20,8 @@ class AbcModule {
 				self::load('jquery');
 
 				// loaders / blockers
-				Requirements::javascript(ABC_PATH.'/javascript/library/jQuery/mobile/jquery.mobile.custom.min.js');
-				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/mobile/jquery.mobile.custom.min.js');
+				Requirements::javascript(ABC_PATH.'/javascript/library/jQuery/mobile/jquery.mobile-1.3.2.min.js');
+				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/mobile/jquery.mobile-1.3.2.min.js');
 				break;
 
 			case 'bootstrap':
