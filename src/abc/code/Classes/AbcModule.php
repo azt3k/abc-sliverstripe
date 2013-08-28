@@ -56,10 +56,11 @@ class AbcModule {
 				Requirements::javascript(ABC_PATH.'/javascript/library/jQuery/event.drag/jquery.event.drag.live.js');	
 				Requirements::javascript(ABC_PATH.'/javascript/library/jquery.drag.touch.js');
 				Requirements::javascript(ABC_PATH.'/javascript/library/jQuery/slidatron/jquery.slidatron.js');
-				Requirements::css(ABC_PATH.'/javascript/library/jQuery/slidatron/slidatron.css');
+				// Requirements::css(ABC_PATH.'/javascript/library/jQuery/slidatron/slidatron.css');
 				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/event.drag/jquery.event.drag.js');
 				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/event.drag/jquery.event.drag.live.js');	
-				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jquery.drag.touch.js');				
+				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jquery.drag.touch.js');
+				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/slidatron/jquery.slidatron.js');
 				break;
 
 			default:
