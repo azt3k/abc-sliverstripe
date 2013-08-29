@@ -14,7 +14,7 @@ class AbcModule {
 				LeftAndMain::require_javascript(THIRDPARTY_DIR."/jquery/jquery.js");
 				break;
 
-			case 'jquery.mobile':
+			case 'jquery-mobile':
 
 				// dependencies
 				self::load('jquery');
@@ -63,8 +63,20 @@ class AbcModule {
 				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/slidatron/jquery.slidatron.js');
 				break;
 
+			case 'nivo-slider':
+
+				// dependencies
+				self::load('jquery');
+
+				// loaders / blockers
+				Requirements::javascript(ABC_PATH.'/javascript/library/jQuery/nivo-slider/jquery.nivo.slider.js');
+				Requirements::css(ABC_PATH.'/javascript/library/jQuery/nivo-slider/themes/default/default.css');	
+				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/nivo-slider/jquery.nivo.slider.js');
+				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/nivo-slider/themes/default/default.css');
+				break;				
+
 			default:
-				throw new Exception('Invalid module requested');
+				throw new Exception('Invalid module requested; currently available modules are: jquery, jquery-mobile, bootstrap, avgrund, slidatron, nivo-slider');
 				break;
 		}
 	}
