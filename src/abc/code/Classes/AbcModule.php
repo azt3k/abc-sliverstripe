@@ -69,10 +69,12 @@ class AbcModule {
 				self::load('jquery');
 
 				// loaders / blockers
-				Requirements::javascript(ABC_PATH.'/javascript/library/jQuery/nivo-slider/jquery.nivo.slider.js');
+				Requirements::javascript(ABC_PATH.'/javascript/library/jQuery/nivo-slider/jquery.nivo.slider.pack.js');
+				Requirements::css(ABC_PATH.'/javascript/library/jQuery/nivo-slider/nivo-slider.css');
 				Requirements::css(ABC_PATH.'/javascript/library/jQuery/nivo-slider/themes/default/default.css');	
-				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/nivo-slider/jquery.nivo.slider.js');
-				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/nivo-slider/themes/default/default.css');
+				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/nivo-slider/jquery.nivo.slider.pack.js');
+				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/nivo-slider/nivo-slider.css');
+				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/nivo-slider/themes/default/default.css');					
 				break;				
 
 			default:

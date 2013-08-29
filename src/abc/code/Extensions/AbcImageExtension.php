@@ -42,39 +42,34 @@ class AbcImageExtension extends DataExtension {
 	}	
 
 	public function isValid(){
-		return !$this->Filename || !is_file($_SERVER['DOCUMENT_ROOT'].'/'.$this->Filename) ? false : true ;
+		return !$this->owner->Filename || !is_file($_SERVER['DOCUMENT_ROOT'].'/'.$this->owner->Filename) ? false : true ;
 	}
 
 	protected function failSafe(){
 		if (!$this->isValid()){
-			if ( !$image = DataObject::get_one('AbcImage',"Filename='".self::$fallback_image."'") ){
-				$this->Filename = self::$fallback_image;
-				$this->write();
+			if ( !$image = DataObject::get_one('Image',"Filename='".self::$fallback_image."'") ){
+				$this->owner->Filename = self::$fallback_image;
+				$this->owner->write();
 			}else{
-				$this->ID = $image->ID;
-				$this->Filename = self::$fallback_image;
+				$this->owner->ID = $image->ID;
+				$this->owner->Filename = self::$fallback_image;
 			}
 		}
 	}	
 
-	public function resizedAbsoluteURL($w, $h){
+	public function CroppedImageAbsoluteURL($w, $h){
 		$this->failSafe();
-		return !$this->isValid() ? false : Director::absoluteBaseURL().str_replace('%2F','/',rawurlencode($this->setSize($w, $h)->getFilename()));
-	}
-	
-	public function resizedCroppedAbsoluteURL($w, $h){
-		$this->failSafe();
-		return !$this->isValid() ? false : Director::absoluteBaseURL().str_replace('%2F','/',rawurlencode($this->CroppedImage($w, $h)->getFilename()));
+		return !$this->isValid() ? false : Director::absoluteBaseURL().str_replace('%2F','/',rawurlencode($this->owner->CroppedImage($w, $h)->getFilename()));
 	}
 
-	public function setWidthAbsoluteURL($w){
+	public function SetWidthAbsoluteURL($w){
 		$this->failSafe();
-		return !$this->isValid() ? false : Director::absoluteBaseURL().str_replace('%2F','/',rawurlencode($this->setWidth($w)->getFilename()));
+		return !$this->isValid() ? false : Director::absoluteBaseURL().str_replace('%2F','/',rawurlencode($this->owner->setWidth($w)->getFilename()));
 	}
 	
-	public function setSizeAbsoluteURL($w, $h) {
+	public function SetSizeAbsoluteURL($w, $h) {
 		$this->failSafe();
-		return !$this->isValid() ? false : Director::absoluteBaseURL().str_replace('%2F','/',rawurlencode($this->SetSize($w,$h)->getFilename()));
+		return !$this->isValid() ? false : Director::absoluteBaseURL().str_replace('%2F','/',rawurlencode($this->owner->SetSize($w,$h)->getFilename()));
 	}
 
 }
