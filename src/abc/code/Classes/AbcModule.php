@@ -31,7 +31,7 @@ class AbcModule {
 
 				// loaders / blockers
 				Requirements::javascript(ABC_PATH."/javascript/library/jQuery/avgrund/jquery.avgrund.js");
-				Requirements::css(ABC_PATH."/javascript/library/jQuery/avgrund/argvund.css");
+				Requirements::css(ABC_PATH."/javascript/library/jQuery/avgrund/avgrund.css");
 				LeftAndMainHelper::require_block(ABC_PATH."/javascript/library/jQuery/avgrund/jquery.avgrund.js");
 				LeftAndMainHelper::require_block(ABC_PATH."/javascript/library/jQuery/avgrund/argvund.css");
 				break;				
