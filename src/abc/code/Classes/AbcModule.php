@@ -24,6 +24,18 @@ class AbcModule {
 				LeftAndMainHelper::require_block(ABC_PATH.'/javascript/library/jQuery/mobile/jquery.mobile-1.3.2.min.js');
 				break;
 
+			case 'lean-modal':
+
+				// dependencies
+				self::load('jquery');			
+
+				// loaders / blockers
+				Requirements::javascript(ABC_PATH."/javascript/library/jQuery/lean-modal/jquery.lean-modal.min.js");
+				Requirements::css(ABC_PATH."/javascript/library/jQuery/lean-modal/jquery.lean-modal.css");
+				LeftAndMainHelper::require_block(ABC_PATH."/javascript/library/jQuery/lean-modal/jquery.lean-modal.min.js");
+				LeftAndMainHelper::require_block(ABC_PATH."/javascript/library/jQuery/lean-modal/jquery.lean-modal.css");
+				break;	
+
 			case 'avgrund':
 
 				// dependencies
