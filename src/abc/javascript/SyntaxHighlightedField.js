@@ -3,7 +3,7 @@
 	
 		$('.syntax-highlighted').each(function( {
 			var $this = $(this);
-			var myCodeMirror = CodeMirror(document.body, {
+			var myCodeMirror = CodeMirror(this, {
 				value: $this.val(),
 				mode:  $this.attr('data-type')
 			});
