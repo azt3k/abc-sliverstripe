@@ -24,13 +24,15 @@ class SyntaxHighlightedField extends TextAreaField {
 	function __construct($name, $title = null, $value = null, $type="html") {
 
 		// Requirements
-		Requirements::javascript('abc/javascript/library/jQuery/snippet/jquery.snippet.min.js');
-		Requirements::javascript('abc/javascript/SyntaxHighlightedField.js');		
-		Requirements::css('abc/javascript/library/jQuery/snippet/jquery.snippet.min.css');
+		Requirements::javascript(ABC_PATH.'/javascript/library/codemirror/lib/codemirror.js');
+		Requirements::css(ABC_PATH.'/javascript/library/codemirror/lib/codemirror.css');
+		Requirements::javascript(ABC_PATH.'/javascript/library/codemirror/mode/'.$type.'/'.$type.'.js');		
+		Requirements::javascript('abc/javascript/SyntaxHighlightedField.js');
 		
 		// classes
-		$this->addExtraClass('snippet');
-		$this->addExtraClass('snippet-'.$type);
+		$this->addExtraClass('syntax-highlighted');
+		$this->addExtraClass('syntax-highlighted-'.$type);
+		$this->setAttribute( 'data-type', $type );
 
 		// call parent constructor
 		parent::__construct($name, $title = null, $value = null);
