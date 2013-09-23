@@ -37,7 +37,7 @@ class AbcStr{
 	}
 
 	public function __toString() {
-		return $this->str
+		return $this->str;
 	}
 
 }
