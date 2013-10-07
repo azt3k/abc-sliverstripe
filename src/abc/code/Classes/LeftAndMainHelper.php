@@ -9,26 +9,22 @@ class LeftAndMainHelper {
 	
 	/**
 	 *	@param (string | array) $files - a string or an array of strings representing the relative (to the SS root) paths of the files you wish to block
-	 *  @return (object) self
 	 */
 	public static function require_block($files) {
 		if (!is_array($files)) $files = array($files);
 		foreach ($files as $file) {
 			self::$extra_requirements['block'][] = array($file);
 		}
-		return self;
 	}
 
 	/**
 	 *	@param (string | array) $files - a string or an array of strings representing the relative (to the SS root) paths of the files you wish to block
-	 *  @return (object) self
 	 */	
 	public static function require_unblock($files) {
 		if (!is_array($files)) $files = array($files);
 		foreach ($files as $file) {
 			self::$extra_requirements['unblock'][] = array($file);
 		}
-		return self;
 	}
 
 	/**
