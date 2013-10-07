@@ -14,6 +14,7 @@ Image::add_extension('AbcImageExtension');
 File::add_extension('AbcFileExtension');
 LeftAndMain::add_extension('AbcLeftAndMainExtension');
 Security::add_extension('AbcSecurityExtension');
+Controller::add_extension('AbcControllerExtension')
 
 // Basic Requirements - modernizer needs to be the last thing loaded in the head so add it manually
 // Requirements::javascript(ABC_PATH."/javascript/library/modernizr-2.6.2.min.js");
