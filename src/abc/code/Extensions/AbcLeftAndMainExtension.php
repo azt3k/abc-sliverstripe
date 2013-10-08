@@ -5,7 +5,7 @@
  */
 class AbcLeftAndMainExtension extends LeftAndMainExtension {
 	
-	public function init() {
+	public function onAfterInit() {
 		LeftAndMainHelper::process_requirements();
 	}	
 	
