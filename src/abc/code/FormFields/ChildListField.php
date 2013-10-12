@@ -23,8 +23,8 @@ class ChildListField extends LiteralField {
 
 	function __construct($controller, $name, $class = 'Page', $limit = 30) {
 
-		Requirements::javascript('abc/javascript/child-list.js');
-		Requirements::css('abc/css/child-list.css');
+		Requirements::javascript(ABC_PATH . '/javascript/child-list.js');
+		Requirements::css(ABC_PATH . '/css/child-list.css');
 
 		$do 			= new DataObject;
 		$do->DataSet 	= AddPaginator::get($limit)->fetch($class, "SiteTree.ParentID = ".$controller->ID, "PublicationDate DESC, Created DESC");
