@@ -1,0 +1,14 @@
+{
+  "name": "jquery.colorpicker",
+  "homepage": "https://github.com/vanderlee/colorpicker",
+  "version": "4.9.2",
+  "_release": "4.9.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "4.9.2",
+    "commit": "b2ada4740a03a6d5b61dd340fc33795e70a3b3f0"
+  },
+  "_source": "git://github.com/vanderlee/colorpicker.git",
+  "_target": ">=1.0.5",
+  "_originalSource": "jquery.colorpicker"
+}
