@@ -23,7 +23,7 @@
     "tag": "3.18.0",
     "commit": "bf76d351e1f6aa7684e1ffe977bb412748c7303a"
   },
-  "_source": "git@github.com:marijnh/CodeMirror.git",
+  "_source": "git://github.com/marijnh/CodeMirror.git",
   "_target": "*",
-  "_originalSource": "git@github.com:marijnh/CodeMirror.git"
+  "_originalSource": "git://github.com/marijnh/CodeMirror.git"
 }

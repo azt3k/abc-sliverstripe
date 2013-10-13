@@ -4,6 +4,6 @@
     "dependencies": {
         "jquery": "~1.10.2",
         "jquery.colorpicker": ">=1.0.5",
-        "codemirror": "git@github.com:marijnh/CodeMirror.git"
+        "codemirror": "git://github.com/marijnh/CodeMirror.git"
     }
 }
