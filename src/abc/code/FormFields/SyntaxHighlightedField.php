@@ -13,7 +13,7 @@ class SyntaxHighlightedField extends TextAreaField {
 		Requirements::css(ABC_VENDOR_PATH . '/codemirror/lib/codemirror.css');
 		Requirements::javascript(ABC_VENDOR_PATH . '/codemirror/mode/'.$type.'/'.$type.'.js');		
 		Requirements::javascript(ABC_PATH . '/javascript/SyntaxHighlightedField.js');
-		
+
 		// classes
 		$this->addExtraClass('syntax-highlighted');
 		$this->addExtraClass('syntax-highlighted-'.$type);

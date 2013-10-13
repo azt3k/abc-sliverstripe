@@ -1,0 +1,44 @@
+body .ui-colorpicker-map-layer-1,
+body .ui-colorpicker-map-layer-2 {
+    background:             url(/abc-silverstripe/vendor/jquery.colorpicker/images/map.png) no-repeat;
+}
+
+body .ui-colorpicker-map-layer-alpha {
+    background:             url(/abc-silverstripe/vendor/jquery.colorpicker/images/map-opacity.png);
+}
+
+body .ui-colorpicker-map-pointer {
+    background:             url(/abc-silverstripe/vendor/jquery.colorpicker/images/map-pointer.png) no-repeat;
+}
+
+body .ui-colorpicker-bar-layer-1,
+body .ui-colorpicker-bar-layer-2,
+body .ui-colorpicker-bar-layer-3,
+body .ui-colorpicker-bar-layer-4 {
+    background:             url(/abc-silverstripe/vendor/jquery.colorpicker/images/bar.png) repeat-x;
+}
+
+body .ui-colorpicker-bar-layer-alpha {
+    background:             url(/abc-silverstripe/vendor/jquery.colorpicker/images/bar-opacity.png);
+}
+
+body .ui-colorpicker-bar-layer-alphabar {
+    background:             url(/abc-silverstripe/vendor/jquery.colorpicker/images/bar-alpha.png);
+}
+
+body .ui-colorpicker-bar-pointer {
+    background:             url(/abc-silverstripe/vendor/jquery.colorpicker/images/bar-pointer.png) no-repeat;
+}
+
+body .ui-colorpicker-preview-initial-alpha,
+body .ui-colorpicker-preview-current-alpha {
+    background:             url(/abc-silverstripe/vendor/jquery.colorpicker/images/preview-opacity.png) repeat;
+}
+
+body .ui-colorpicker .ui-dialog-content {
+    margin:30px;
+}
+
+body .field.colourpicker.text .ui-button-text-only .ui-button-text {
+    display:none;
+}
