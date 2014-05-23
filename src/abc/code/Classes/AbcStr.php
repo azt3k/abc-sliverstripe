@@ -19,8 +19,9 @@ class AbcStr{
 	public function limitWords($wordLimit = null, $overflowIndicator = '...') {
 		if (!$wordLimit) $wordLimit = self::$wordLimit;
 		$words = explode(" ",$this->str);
+		if (count($words) <= $wordLimit) $overflowIndicator = '';
 		$this->str = implode(" ",array_splice($words,0,$wordLimit)).$overflowIndicator;
-		return $this;	 	
+		return $this;
 	}
 
 	public function limitChars($charLimit = null, $overflowIndicator = '...') {
@@ -28,12 +29,12 @@ class AbcStr{
 		if (strlen($this->str) <= $charLimit) return $this;
 		$effectiveLimit = $charLimit - strlen($overflowIndicator);
 		$this->str = substr($this->str, 0, $effectiveLimit).$overflowIndicator;
-		return $this;	 	
-	}	
+		return $this;
+	}
 
 	public function limitCharsNoDotDot($charLimit = null) {
 		$this->limitChars($charLimit = null, $overflowIndicator = '');
-		return $this;	 	
+		return $this;
 	}
 
 	public function __toString() {
