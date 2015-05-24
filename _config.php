@@ -4,7 +4,7 @@
 $path = str_replace('\\', '/', __DIR__);
 $path_fragments = explode('/', $path);
 $dir_name = $path_fragments[count($path_fragments) - 1];
-define('ABC_VENDOR_PATH', $dir_name . '/vendor');
+define('ABC_VENDOR_PATH', $dir_name . '/thirdparty');
 define('ABC_PATH', $dir_name . '/src/abc');
 
 // Configure Image Extension
