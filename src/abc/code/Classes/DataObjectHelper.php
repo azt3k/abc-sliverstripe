@@ -27,15 +27,23 @@ class DataObjectHelper{
 	 */
 	private static function generateExtensionMap(){
 
-		// init some vars
+		// get a list of classes
 		$classes = array_unique(array_merge(array_keys(ClassInfo::allClasses()), get_declared_classes()));
 		// die(print_r($classes,1));
+
+		// Silverstripe has broken clases floating around, we need to blacklist them or it's bad times
+		$blacklist = array('SapphireTestReporter', 'SapphireTest', 'SapphireTestSuite');
+
+		// init some vars
 		$extMap = $dOClasses = $dODClasses = array();
 
 		// Sort Classes
 		foreach($classes as $class){
-			if ( is_subclass_of($class, 'DataObject') ) $dOClasses[] = $class;
-			if ( is_subclass_of($class, 'Extension') ) $dODClasses[] = $class;
+			if (!in_array($class, $blacklist) && !in_array(strtolower($class), $blacklist) ) {
+				// this breaks when we start looking at some of the broken requires in SapphireTest
+				if ( is_subclass_of($class, 'DataObject') ) $dOClasses[] = $class;
+				if ( is_subclass_of($class, 'Extension') ) $dODClasses[] = $class;
+			}
 		}
 
 		// Find out what is applied to what
