@@ -15,7 +15,7 @@ class DataObjectHelper{
 	 */
 	public static function getExtendedClasses($extension){
 
-		if ( !count(self::$extensionMap) ) self::generateExtentionMap() ;
+		if ( !count(self::$extensionMap) ) self::generateExtensionMap() ;
 
 		// Return the result
 		return empty(self::$extensionMap[$extension]) ? false : self::$extensionMap[$extension];
@@ -25,8 +25,11 @@ class DataObjectHelper{
 	/*
 	 *	Generates a map of extensions that have been applied to Data Objects
 	 */
-	private static function generateExtentionMap(){
-		$classes = get_declared_classes();
+	private static function generateExtensionMap(){
+
+		// init some vars
+		$classes = array_unique(array_merge(array_keys(ClassInfo::allClasses()), get_declared_classes()));
+		// die(print_r($classes,1));
 		$extMap = $dOClasses = $dODClasses = array();
 
 		// Sort Classes
@@ -35,23 +38,23 @@ class DataObjectHelper{
 			if ( is_subclass_of($class, 'Extension') ) $dODClasses[] = $class;
 		}
 
-		// Find out what is applied to what	
+		// Find out what is applied to what
 		foreach($dODClasses as $dOD){
 			foreach($dOClasses as $dO){
 				if ( Object::has_extension($dO, $dOD) ) $extMap[$dOD][] = $dO;
 			}
 		}
-		
+
 		// Cache the map
-		self::$extensionMap = $extMap;		
+		self::$extensionMap = $extMap;
 	}
-	
+
 	/*
 	 *	Returns the table name for a given DataObject
-	 * 
+	 *
 	 *	@param	(str)	$class	The name of the DataObject
-	 * 
-	 */	
+	 *
+	 */
 	public static function getTableForClass($className){
 
 		// If the result is already cached use that
@@ -64,7 +67,7 @@ class DataObjectHelper{
 
 		// go through parent classes and look for the one that will have created a db table
 		while ($class = $class->getParentClass()) {
-			
+
 			$currentClass = $class->getName();
 
 			// Cache and return the table mapping
@@ -79,26 +82,26 @@ class DataObjectHelper{
 			$i++;
 
 		}
-		
+
 	}
 
 	/*
 	 *	Returns the table created in the add_extension process for a given DataObject
-	 * 
+	 *
 	 *	@param	(str)	$class	The name of the DataObject
-	 * 
-	 */	
+	 *
+	 */
 	public static function getExtensionTablesForClass($className){
 
 		// If the result is already cached use that
 		if (!empty(self::$dOExtTableMap[$className])) return self::$dOExtTableMap[$className] ;
-		
+
 		$tables = array();
 
 		//check the current class before proceeding on to the parents
 		if (self::tableExists($className)) $tables[] = $className;
 
-		// Look through the parents of the class and find the lowest level class with its own table		
+		// Look through the parents of the class and find the lowest level class with its own table
 		$class = new ReflectionClass($className);
 		while ($class = $class->getParentClass()) {
 
@@ -107,49 +110,49 @@ class DataObjectHelper{
 			if (self::tableExists($currentClass)) $tables[] = $currentClass;
 
 		}
-		
+
 		self::$dOExtTableMap[$className] = $tables;
-		
+
 		return $tables;
-		
+
 	}
-	
+
 	/*
 	 *	Checks if a table exists for a given classname
-	 */	
+	 */
 	public static function tableExists($className){
-		
+
 		$result = DB::query("SHOW TABLES LIKE '".Convert::raw2sql($className)."'");
 		return $result->numRecords() ? true : false ;
 
 	}
-	
+
 	/*
 	 *	Finds what table a property for a class exists on
-	 */		
+	 */
 	public static function getExtensionTableForClassWithProperty($className,$property){
-		
+
 		// If the result is already cached use that
 		if (!empty(self::$dOExtTablePropertyMap[$className][$property])) return self::$dOExtTablePropertyMap[$className][$property] ;
-		
+
 		// find the Table
 		$tables = self::getExtensionTablesForClass($className);
 
 		foreach($tables as $table){
-			
+
 			// perform query
 			$result = DB::query("SHOW COLUMNS FROM ".Convert::raw2sql($table)." WHERE Field LIKE '".Convert::raw2sql($property)."'");
-			
+
 			// Cache and return the result
 			if($result->numRecords()){
-				self::$dOExtTablePropertyMap[$className][$property] = $table;	
+				self::$dOExtTablePropertyMap[$className][$property] = $table;
 				return $table;
 			}
-			
+
 		}
-		
+
 		return false;
-	}	
+	}
 
 	/*
 	 *	Populates the object with the data found in $data
@@ -166,7 +169,7 @@ class DataObjectHelper{
 		}
 		return $obj;
 	}
-	
+
 	/*
 	 * Gets sub classes of the provided class - possibly should work off the manifest rather than get declared classes
 	 */
@@ -179,16 +182,16 @@ class DataObjectHelper{
 		// 	if (is_subclass_of($class, $parent))
 		// 		$result[] = $class;
 		// }
-		
-	}	
+
+	}
 
 	protected static function getFieldsForObj($obj) {
 
 		$dbFields = array();
-		
+
 		// if custom fields are specified, only select these
 		$dbFields = $obj->inheritedDatabaseFields();
-		
+
 		// add default required fields
 		$dbFields = array_merge($dbFields, array('ID'=>'Int'));
 
@@ -221,7 +224,7 @@ class DataObjectHelper{
 		// inclusion
 		foreach($includeInDump as $incl){
 			$tmp = null;
-			try{ 
+			try{
 				$tmp = $do->$incl();
 			}catch(Exception $e){
 				try{
@@ -243,8 +246,8 @@ class DataObjectHelper{
 				$out[$incl] = self::DO2Array($tmp, $depth, $exclude, $include, $currentDepth+1);
 			}elseif( $tmp ){
 				$out[$incl] = $tmp;
-			}			
-		}				
+			}
+		}
 
 		// Relations
 		if($depth > $currentDepth){
@@ -253,7 +256,7 @@ class DataObjectHelper{
 					if(!in_array($k, $excludeFromDump)){
 						$r = array();
 						foreach($do->$k() as $childK => $childV){
-							$r[] = self::DO2Array($childV, $depth, $exclude, $include, $currentDepth+1);					
+							$r[] = self::DO2Array($childV, $depth, $exclude, $include, $currentDepth+1);
 						}
 						$out[$k] = $r;
 					}
@@ -269,7 +272,7 @@ class DataObjectHelper{
 					if(!in_array($k, $excludeFromDump)){
 						$r = array();
 						foreach($do->$k() as $childK => $childV){
-							$r[] = self::DO2Array($childV, $depth, $exclude, $include, $currentDepth+1);					
+							$r[] = self::DO2Array($childV, $depth, $exclude, $include, $currentDepth+1);
 						}
 						$out[$k] = $r;
 					}
@@ -288,12 +291,12 @@ class DataObjectHelper{
 		$out = array();
 
 		foreach($dos as $do){
-			$out[] = self::DO2Array($do, $depth, $exclude, $include, $currentDepth+1);	
+			$out[] = self::DO2Array($do, $depth, $exclude, $include, $currentDepth+1);
 		}
 
 		return $out;
 
-	}	
+	}
 
 	/*
 	 *	DataObject to JSON
@@ -311,6 +314,6 @@ class DataObjectHelper{
 
 		return json_encode(self::DOS2Array($dos, $depth, $exclude, $include, $currentDepth));
 
-	}	
+	}
 
 }
