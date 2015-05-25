@@ -37,7 +37,7 @@ class DataObjectHelper{
 			'SapphireTest',
 			'SapphireTestSuite',
 			'CliTestReporter',
-			'SilverstripeListener',
+			'SilverStripeListener',
 			'TeamCityListener',
 			'SS_TestListener'
 		);
