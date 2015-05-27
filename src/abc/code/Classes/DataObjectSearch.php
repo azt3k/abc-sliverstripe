@@ -60,7 +60,7 @@ class DataObjectSearch {
      * @param  array  $fields [description]
      * @return [type]         [description]
      */
-    public static function weighted_search($className, $q, array $fields) {
+    public static function weighted_search($className, $q, array $fields = array('Content' => 1,'Title' => 3), $start = 0, $limit = 10, $filterSql = null) {
 
         // parse terms
         $terms = static::str_to_terms($q);
@@ -68,76 +68,89 @@ class DataObjectSearch {
         $terms = array_unique($terms);
 
         // Set some vars
-        $set         = new ArrayList;
-        $db          = AbcDB::getInstance();
-        $sql         = '';
-        $tables = $joins = $filter = array();
+        $set = new ArrayList;
+        $db  = AbcDB::getInstance();
+        $sql = '';
 
         // Fetch Class Data
-        $table      = DataObjectHelper::getTableForClass($className);
-        $extTable   = DataObjectHelper::getExtensionTableForClassWithProperty($className, 'Tags');
+        $table = DataObjectHelper::getTableForClass($className);
 
-        // $tables we are working with
-        if ($table) $tables[$table] = $table;
+        foreach ($fields as $field => $weight) {
 
-        // join
-        if( $table && $extTable && $table!=$extTable ){
-            $joins[$table][] = $extTable;
-        }elseif($extTable){
-            $tables[$extTable] = $extTable;
-        }
+            // init the recivers
+            $tables = $joins = $filter = array();
 
-        // Where
-        if ($table) $where[$table][] = $table . ".ClassName = '" . $className . "'";
+            // $tables we are working with
+            if ($table) $tables[$table] = $table;
 
-        // Tag filter
-        // Should be REGEX so we don't get partial matches
-        if ($extTable) {
-            foreach ($terms as $term) {
-                $filter[$table][] = $extTable . ".Tags REGEXP '(^|,| )+" . Convert::raw2sql($term) . "($|,| )+'";
+            // Where
+            if ($table) $where[$table][] = $table . ".ClassName = '" . $className . "'";
+
+            // find the table the property is on
+            $extTable = DataObjectHelper::getExtensionTableForClassWithProperty($className, $field);
+
+            // join
+            if ( $table && $extTable && $table!=$extTable ) {
+                $joins[$table][] = $extTable;
+            } elseif ($extTable) {
+                $tables[$extTable] = $extTable;
             }
-        }
 
+            // ext table
+            if ($extTable) {
+                foreach ($terms as $term) {
+                    $filter[$table][] = $extTable . "." . $field . " LIKE '%" . Convert::raw2sql($term) . "%'";
+                }
+            } else {
+                foreach ($terms as $term) {
+                    $filter[$table][] = $table . "." . $field . " LIKE '%" . Convert::raw2sql($term) . "%'";
+                }
+            }
 
-        // Build Query
-        foreach($tables as $table){
-
-            if (array_key_exists($table, $joins)){
+            // Build Query
+            foreach($tables as $table){
 
                 // Prepare Where Statement
                 $uWhere     = array_unique($where[$table]);
                 $uFilter    = array_unique($filter[$table]);
 
-                // this lookupMode injection will prob break something in AND mode
-                $wSql         = "(".implode(' OR ',$uWhere).") AND (".implode(' ' . $lookupMode . ' ',$uFilter).")";
+                // Where SQL
+                $wSql = "(".implode(' OR ',$uWhere).") AND (".implode(' OR ',$uFilter).")";
 
                 // Make the rest of the SQL
-                if ($sql) $sql.= "UNION ALL"."\n\n";
-                $rowCountSQL = !$sql ? "SQL_CALC_FOUND_ROWS " : "" ;
-                $sql.= "SELECT " . $rowCountSQL . $table . ".ClassName, " . $table . ".ID" . "\n";
+                if ($sql) $sql.= " ) UNION ALL ("."\n\n";
+                $sql.= "SELECT " . $table . ".ClassName, " . $table . ".ID,  " . $weight .  " AS weight" . "\n";
                 $sql.= "FROM " . $table . "\n";
 
                 // join
-                $join = array_unique($joins[$table]);
-                foreach($join as $j){
-                    $sql .= " LEFT JOIN " . $j . " ON " . $table . ".ID = " . $j . ".ID" . "\n";
+                if (array_key_exists($table, $joins)){
+                    $join = array_unique($joins[$table]);
+                    foreach($join as $j){
+                        $sql .= " LEFT JOIN " . $j . " ON " . $table . ".ID = " . $j . ".ID" . "\n";
+                    }
                 }
 
                 // Add the WHERE statement
                 $sql .= "WHERE " . $wSql . "\n\n";
             }
+
+            // Add Global Filter to Query
+            if ($filterSql) {
+                $sql .= (count($tables) == 1 ? "AND " : "WHERE ") . $filterSql;
+            }
         }
 
-        // Add Global Filter to Query
-        if ($filterSql) {
-            $sql .= (count($tables) == 1 ? "AND " : "WHERE ") . $filterSql;
-        }
-
-        // Add Limits to Query
-        $sql .= " LIMIT " . $start . "," . $limit;
+        // Add Limits and order to Query
+        $sql = "
+            SELECT SQL_CALC_FOUND_ROWS ClassName, ID, SUM(weight) AS total_weight
+            FROM ((" . $sql . ")) AS t1
+            GROUP BY ID
+            ORDER BY total_weight DESC
+            LIMIT " . $start . "," . $limit . "
+        ";
 
         // Get Data
-        // die($sql);
+        // die('<br>' . $sql . '<br>');
         $result = $db->query($sql);
         $result = $result ? $result->fetchAll(PDO::FETCH_OBJ) : array() ;
 
@@ -147,10 +160,6 @@ class DataObjectSearch {
             // Make the data easier to work with
             $entry         = (object) $entry;
             $className     = $entry->ClassName;
-
-            // this is faster but might not pull in relations
-            //$dO = new $className;
-            //$dO = DataObjectHelper::populate($dO, $entry);
 
             // this is slower, but will be more reliable
             $dO = DataObject::get_by_id($className, $entry->ID);
