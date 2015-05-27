@@ -10,12 +10,12 @@ class DataObjectSearch {
             'in','out','over','to','into','with',
             'also','back','well','big','when','where',
             'why','who','which', 'it', 'be', 'so', 'far',
-            'one', 'our', 'we','only','they','this'
+            'one', 'our', 'we','only','they','this', 'i'
         );
     }
 
     public static function str_to_terms($str) {
-        $terms = array_map('trim', explode(',', $str));
+        $terms = array_map('trim', explode(' ', $str));
         $out = array();
         foreach ($terms as $term) {
             if (!in_array(strtolower($term), static::get_blacklisted_words())) {
@@ -76,67 +76,65 @@ class DataObjectSearch {
         $table = DataObjectHelper::getTableForClass($className);
 
         foreach ($fields as $field => $weight) {
+            foreach ($terms as $term) {
 
-            // init the recivers
-            $tables = $joins = $filter = array();
+                // init the recivers
+                $tables = $joins = $filter = array();
 
-            // $tables we are working with
-            if ($table) $tables[$table] = $table;
+                // $tables we are working with
+                if ($table) $tables[$table] = $table;
 
-            // Where
-            if ($table) $where[$table][] = $table . ".ClassName = '" . $className . "'";
+                // Where
+                if ($table) $where[$table][] = $table . ".ClassName = '" . $className . "'";
 
-            // find the table the property is on
-            $extTable = DataObjectHelper::getExtensionTableForClassWithProperty($className, $field);
-
-            // join
-            if ( $table && $extTable && $table!=$extTable ) {
-                $joins[$table][] = $extTable;
-            } elseif ($extTable) {
-                $tables[$extTable] = $extTable;
-            }
-
-            // ext table
-            if ($extTable) {
-                foreach ($terms as $term) {
-                    $filter[$table][] = $extTable . "." . $field . " LIKE '%" . Convert::raw2sql($term) . "%'";
-                }
-            } else {
-                foreach ($terms as $term) {
-                    $filter[$table][] = $table . "." . $field . " LIKE '%" . Convert::raw2sql($term) . "%'";
-                }
-            }
-
-            // Build Query
-            foreach($tables as $table){
-
-                // Prepare Where Statement
-                $uWhere     = array_unique($where[$table]);
-                $uFilter    = array_unique($filter[$table]);
-
-                // Where SQL
-                $wSql = "(".implode(' OR ',$uWhere).") AND (".implode(' OR ',$uFilter).")";
-
-                // Make the rest of the SQL
-                if ($sql) $sql.= " ) UNION ALL ("."\n\n";
-                $sql.= "SELECT " . $table . ".ClassName, " . $table . ".ID,  " . $weight .  " AS weight" . "\n";
-                $sql.= "FROM " . $table . "\n";
+                // find the table the property is on
+                $extTable = DataObjectHelper::getExtensionTableForClassWithProperty($className, $field);
 
                 // join
-                if (array_key_exists($table, $joins)){
-                    $join = array_unique($joins[$table]);
-                    foreach($join as $j){
-                        $sql .= " LEFT JOIN " . $j . " ON " . $table . ".ID = " . $j . ".ID" . "\n";
-                    }
+                if ( $table && $extTable && $table!=$extTable ) {
+                    $joins[$table][] = $extTable;
+                } elseif ($extTable) {
+                    $tables[$extTable] = $extTable;
                 }
 
-                // Add the WHERE statement
-                $sql .= "WHERE " . $wSql . "\n\n";
-            }
+                // ext table
+                if ($extTable) {
+                    $filter[$table][] = $extTable . "." . $field . " LIKE '%" . Convert::raw2sql($term) . "%'";
+                } else {
+                    $filter[$table][] = $table . "." . $field . " LIKE '%" . Convert::raw2sql($term) . "%'";
+                }
 
-            // Add Global Filter to Query
-            if ($filterSql) {
-                $sql .= (count($tables) == 1 ? "AND " : "WHERE ") . $filterSql;
+                // Build Query
+                foreach($tables as $table){
+
+                    // Prepare Where Statement
+                    $uWhere     = array_unique($where[$table]);
+                    $uFilter    = array_unique($filter[$table]);
+
+                    // Where SQL
+                    $wSql = "(".implode(' OR ',$uWhere).") AND (".implode(' OR ',$uFilter).")";
+
+                    // Make the rest of the SQL
+                    if ($sql) $sql.= " ) UNION ALL ("."\n\n";
+                    $sql.= "SELECT " . $table . ".ClassName, " . $table . ".ID,  " . $weight .  " AS weight" . "\n";
+                    $sql.= "FROM " . $table . "\n";
+
+                    // join
+                    if (array_key_exists($table, $joins)){
+                        $join = array_unique($joins[$table]);
+                        foreach($join as $j){
+                            $sql .= " LEFT JOIN " . $j . " ON " . $table . ".ID = " . $j . ".ID" . "\n";
+                        }
+                    }
+
+                    // Add the WHERE statement
+                    $sql .= "WHERE " . $wSql . "\n\n";
+                }
+
+                // Add Global Filter to Query
+                if ($filterSql) {
+                    $sql .= (count($tables) == 1 ? "AND " : "WHERE ") . $filterSql;
+                }
             }
         }
 
