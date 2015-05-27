@@ -190,7 +190,7 @@ class DataObjectSearch {
         ";
 
         // Get Data
-        die('<br>' . $sql . '<br>');
+        // die('<br>' . $sql . '<br>');
         $result = $db->query($sql);
         $result = $result ? $result->fetchAll(PDO::FETCH_OBJ) : array() ;
 
