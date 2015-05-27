@@ -10,7 +10,8 @@ class DataObjectSearch {
             'in','out','over','to','into','with',
             'also','back','well','big','when','where',
             'why','who','which', 'it', 'be', 'so', 'far',
-            'one', 'our', 'we','only','they','this', 'i'
+            'one', 'our', 'we','only','they','this', 'i',
+            'do'
         );
     }
 
@@ -63,6 +64,7 @@ class DataObjectSearch {
     public static function weighted_search($className, $q, array $fields = array('Content' => 1,'Title' => 3), $start = 0, $limit = 10, $filterSql = null) {
 
         // parse terms
+        // need to analyse various fragments like first 3 words, last 3 words
         $terms = static::str_to_terms($q);
         $terms[] = $q;
         $terms = array_unique($terms);
