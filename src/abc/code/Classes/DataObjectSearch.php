@@ -27,6 +27,46 @@ class DataObjectSearch {
     }
 
     /**
+     * generates a window of text up to 4 words long
+     *
+     * @param  [type] $str [description]
+     * @return [type]      [description]
+     */
+    public static function str_to_fragments($str) {
+        $terms = array_map('trim', explode(' ', $str));
+        $out = array();
+        foreach ($terms as $k => $term) {
+
+            // add the raw word
+            $out[] = $term;
+
+            // extract what we can
+            $prevPrev = empty($terms[$k - 2]) ? '' : $terms[$k - 2];
+            $prev = empty($terms[$k - 1]) ? '' : $terms[$k - 1];
+            $next = empty($terms[$k + 1]) ? '' : $terms[$k + 1];
+            $nextNext = empty($terms[$k + 2]) ? '' : $terms[$k + 2];
+
+            // fragments
+            $o5 = $o3 = array();
+
+            // generate 3 word fragment
+            if ($prev) $o3[] = $prev;
+            $o3[] = $term;
+            if ($next) $o3[] = $next;
+            $o3 = implode(' ', $o3);
+            $out[] = $o3;
+
+            // generate 5 word fragment
+            if ($prevPrev) $o5[] = $prevPrev;
+            $o5[] = $o3;
+            if ($nextNext) $o5[] = $nextNext;
+            $o5 = implode(' ', $o5);
+            $out[] = $o5;
+        }
+        return array_unique($out);
+    }
+
+    /**
      * kind of a wierd thing to add in here
      * @param  [type] $class  [description]
      * @param  [type] $q      [description]
@@ -36,7 +76,7 @@ class DataObjectSearch {
     public static function search_list($class, $q, array $fields) {
 
         // parse terms
-        $terms = static::str_to_terms($q);
+        $terms = array_merge(static::str_to_terms($q), static::str_to_fragments($q));
         $terms[] = $q;
         $terms = array_unique($terms);
 
@@ -65,7 +105,7 @@ class DataObjectSearch {
 
         // parse terms
         // need to analyse various fragments like first 3 words, last 3 words
-        $terms = static::str_to_terms($q);
+        $terms = array_merge(static::str_to_terms($q), static::str_to_fragments($q));
         $terms[] = $q;
         $terms = array_unique($terms);
 
@@ -150,7 +190,7 @@ class DataObjectSearch {
         ";
 
         // Get Data
-        // die('<br>' . $sql . '<br>');
+        die('<br>' . $sql . '<br>');
         $result = $db->query($sql);
         $result = $result ? $result->fetchAll(PDO::FETCH_OBJ) : array() ;
 
