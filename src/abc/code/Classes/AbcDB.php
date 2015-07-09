@@ -12,10 +12,12 @@ class AbcDB extends PDO{
 		// Make the config easier to work with
 		$conf = (object) $databaseConfig;
 
-		// DSN 
-		if (!$dsn) $dsn =	strtolower(str_replace("Database", "", $conf->type)).":". 
-							"host=".$conf->server.";".
-							"dbname=".$conf->database;
+		// fix for sqlite dbs
+		$type = strtolower(str_replace('Database', '', $conf->type));
+		if ($type == 'sqlitepdo') $type = 'sqlite';
+
+		// DSN
+		if (!$dsn) $dsn = $type . ':' . 'host='.$conf->server . ';' . 'dbname=' . $conf->database;
 
 		// Authentication
 		if (!$username) $username =	$conf->username;
