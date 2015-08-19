@@ -14,6 +14,7 @@ AbcImageExtension::$fallback_image = ABC_PATH . '/images/no-image.jpg';
 Image::add_extension('AbcImageExtension');
 File::add_extension('AbcFileExtension');
 LeftAndMain::add_extension('AbcLeftAndMainExtension');
+SiteTree::add_extension('AbcSiteTreeExtension');
 Security::add_extension('AbcSecurityExtension');
 Controller::add_extension('AbcControllerExtension');
 

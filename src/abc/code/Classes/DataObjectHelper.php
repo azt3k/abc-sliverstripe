@@ -10,6 +10,11 @@ class DataObjectHelper{
 	protected static $dOExtTableMap			= array();
 	protected static $dOExtTablePropertyMap	= array();
 
+	protected static function db_dialect() {
+		global $databaseConfig;
+		return $databaseConfig['type'];
+	}
+
 	/*
 	 *	Returns an array of classnames that have been extended with a Extension
 	 */
@@ -139,7 +144,11 @@ class DataObjectHelper{
 	 */
 	public static function tableExists($className){
 
-		$result = DB::query("SHOW TABLES LIKE '".Convert::raw2sql($className)."'");
+		if (stripos(static::db_dialect(), 'sqlite') !== false)
+			$result = DB::query("SHOW TABLES LIKE '".Convert::raw2sql($className)."'");
+		else
+			$result = DB::query("SHOW TABLES LIKE '".Convert::raw2sql($className)."'");
+
 		return $result->numRecords() ? true : false ;
 
 	}

@@ -15,8 +15,8 @@ class MySQLDump {
 	public $output;
 	public $droptableifexists = false;
 	public $mysql_error;
-	
-	public function connect($host,$user,$pass,$db) {	
+
+	public function connect($host,$user,$pass,$db) {
 		$return = true;
 		$conn = @mysql_connect($host,$user,$pass);
 		if (!$conn) { $this->mysql_error = mysql_error(); $return = false; }
@@ -38,18 +38,18 @@ class MySQLDump {
 	}
 
 	public function list_values($tablename) {
-		
+
 		$sql = mysql_query("SELECT * FROM $tablename");
 		$this->output .= "\n\n-- Dumping data for table: $tablename\n\n";
 
-		if ($sql){		
+		if ($sql){
 			while ($row = mysql_fetch_array($sql)) {
 				$broj_polja = count($row) / 2;
 				$this->output .= "INSERT INTO `$tablename` VALUES(";
 				$buffer = '';
 				for ($i=0;$i < $broj_polja;$i++) {
 					$vrednost = $row[$i];
-					if (!is_integer($vrednost)) { $vrednost = "'".addslashes($vrednost)."'"; } 
+					if (!is_integer($vrednost)) { $vrednost = "'".addslashes($vrednost)."'"; }
 					$buffer .= $vrednost.', ';
 				}
 				$buffer = substr($buffer,0,count($buffer)-3);
@@ -62,7 +62,7 @@ class MySQLDump {
 
 	public function dump_table($tablename) {
 		$this->output = "";
-		$this->get_table_structure($tablename);	
+		$this->get_table_structure($tablename);
 		$this->list_values($tablename);
 	}
 
@@ -72,7 +72,7 @@ class MySQLDump {
 
 		if ($this->droptableifexists) {
 			$this->output .= "DROP TABLE IF EXISTS `$tablename`;\nCREATE TABLE `$tablename` (\n";
-		} else { 
+		} else {
 			$this->output .= "CREATE TABLE `$tablename` (\n";
 		}
 
@@ -100,7 +100,7 @@ class MySQLDump {
 				// Output
 				$this->output .= "  `$name` $type $null $extra,\n";
 			}
-			$this->output .= "  PRIMARY KEY  (`$primary`)\n);\n";			
+			$this->output .= "  PRIMARY KEY  (`$primary`)\n);\n";
 		}else{
 			$this->output .= "\n\n-- Unable to get structure for for table: $tablename \n\n";
 		}
