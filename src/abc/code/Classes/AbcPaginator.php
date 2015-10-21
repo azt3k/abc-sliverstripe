@@ -3,18 +3,18 @@
 /**
  * @todo join is broken  - ss3 changed the way it handles joins
  */
-class AbcPaginator extends ViewableData{
-	
+class AbcPaginator extends ViewableData {
+
 	public static $defaultPageVar = 'page';
 	public static $defaultHitsVar = 'hits';
 	public static $defaultInitHitsPerPage = 20;
-	public static $defaultPageDisplayRange = 2;	
+	public static $defaultPageDisplayRange = 2;
 
 	public $pageVar;
 	public $hitsVar;
 	public $initHitsPerPage;
 	public $currentPage;
-	public $totalPages;	
+	public $totalPages;
 	public $start;
 	public $limit;
 	public $unlimitedRowCount;
@@ -40,13 +40,13 @@ class AbcPaginator extends ViewableData{
 		$this->currentPage = $page;
 		$this->start = $page == 1 ? 0 : ($hits * ($page-1));
 		$this->limit = $hits;
-		
+
 		parent::__construct();
 
 	}
 
 	public function HitsSelector($baseURL,$options = null){
-		
+
 		$dropdownOptions = array();
 		if ( $options && count($options) ){
 			foreach($options as $option){
@@ -58,19 +58,19 @@ class AbcPaginator extends ViewableData{
 				$dropdownOptions[AbcURL::get($baseURL)->q(array( $this->hitsVar => $dindex, $this->pageVar => 1))->URL] = $dindex;
 			}
 		}
-    
+
         return new DropdownField(
     		$name = 'Hits',
     		$title = ' ',
     		$source = $dropdownOptions,
     		$value = AbcURL::get($baseURL)->q(array( $this->hitsVar => $this->limit, $this->pageVar => 1))->URL
-        );		
-	}	
+        );
+	}
 
 	/*
 	 *	Static instance getter for getting a new instance for chaining
 	 */
-	public function get($initHitsPerPage = null, $pageVar = null, $hitsVar = null){
+	public static function get($initHitsPerPage = null, $pageVar = null, $hitsVar = null){
 		return new self($initHitsPerPage, $pageVar, $hitsVar);
 	}
 
@@ -81,7 +81,7 @@ class AbcPaginator extends ViewableData{
 
 		// set default limit
 		if (!$limit) $limit = $this->start.",".$this->limit;
-		
+
 		// fetch unlimited row count
 		$unlimitedRowCount = $this->getUnlimitedRowCount($callerClass, $filter, $join);
 		$this->unlimitedRowCount = $unlimitedRowCount;
@@ -90,7 +90,7 @@ class AbcPaginator extends ViewableData{
 		if (!$DataSet = DataObject::get($callerClass, $filter, $sort, $join, $limit, $containerClass)) $DataSet = new $containerClass;
 		$DataSet->unlimitedRowCount = $unlimitedRowCount;
 		$DataSet->Paginator = $this;
-		
+
 		return $DataSet;
 	}
 
@@ -108,7 +108,7 @@ class AbcPaginator extends ViewableData{
 		$wSQL = "";
 		//$sql = "SELECT COUNT(*) as total FROM ".$table;
 		$sql = "SELECT COUNT(*) as total FROM ".SS_SITE_DATABASE_NAME.'.'.$table;
-		
+
 		// join
 		if ($join) $sql.= " ".$join;
 		if ($oTable != $callerClass && DataObjectHelper::tableExists($callerClass)) $sql.= " LEFT JOIN ".$callerClass." ON ".$table.".ID = ".$callerClass.".ID";
@@ -124,26 +124,26 @@ class AbcPaginator extends ViewableData{
 				}
 			}
 
-			$wSQL.= ")";	
+			$wSQL.= ")";
 		}
 
 		// Filter
 		if ($filter){
-			$wSQL.= $wSQL ? " AND " : " WHERE " ; 
+			$wSQL.= $wSQL ? " AND " : " WHERE " ;
 			$wSQL.= "(".$filter.")";
 		}
 
 		//finalise
 		$sql.=$wSQL;
-		
-		return self::getUnlimitedRowCountForSQL($sql);		
+
+		return self::getUnlimitedRowCountForSQL($sql);
 	}
 
 	public static function getUnlimitedRowCountForSQL($sql){
 		$r = AbcDB::getInstance()->query($sql);
 		if ( $r ) return $r->fetch(PDO::FETCH_OBJ)->total;
-		
-		return false;		
+
+		return false;
 	}
 
 	/*
@@ -200,21 +200,21 @@ class AbcPaginator extends ViewableData{
 		$return->HitsPerPage			= strval($this->limit);
 		$return->PaginatorRequired		= $totalHits <= $this->limit ? false : true ;
 		$return->PageLinks				= $pageLinks;
-		$return->PageLinks->Paginator	= $this;		
+		$return->PageLinks->Paginator	= $this;
 
-		
+
 
 		return $return;
 	}
-	
+
 	public function IsCurrent($pageNum) {
 		return $this->currentPage == $pageNum ? true : false ;
 	}
-	
+
 	public function IsFirst() {
 		return $this->IsCurrent(1);
 	}
-	
+
 	public function IsLast() {
 		return $this->IsCurrent($this->totalPages);
 	}
