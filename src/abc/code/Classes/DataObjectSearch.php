@@ -245,7 +245,14 @@ class DataObjectSearch extends Object {
             }
 
             // stash total length
-            $set->unlimitedRowCount = $db->query('SELECT FOUND_ROWS() AS total')->fetch(PDO::FETCH_OBJ)->total;
+            $res = $db->query('SELECT FOUND_ROWS() AS total');
+            $set->unlimitedRowCount = 0;
+            if (!empty($res)) {
+                $resObj = $res->fetch(PDO::FETCH_OBJ);
+                if (!empty($resObj)) {
+                    $set->unlimitedRowCount = $resObj->total;
+                }
+            }
 
             // cache
             $cache->save($set, $cachekey);
