@@ -5,6 +5,14 @@
  */
 class AbcSiteTreeExtension extends DataExtension {
 
+    private static $indexes = array(
+        'Title' => true,
+        'Content'  => array(
+            'type' => 'fulltext',
+            'value' => '"Content"'
+        )
+    );
+
     public function HashedPath($file, $extension = null) {
         $absPath = Director::getAbsFile(trim($file  . ($extension ? '.' . $extension : ''), '/'));
         return $file . '?h=' . sha1_file($absPath);
