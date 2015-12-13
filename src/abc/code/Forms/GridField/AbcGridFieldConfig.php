@@ -4,10 +4,10 @@
  * Encapsulates a collection of components following the {@link GridFieldComponent} interface.
  * While the {@link GridField} itself has some configuration in the form of setters,
  * most of the details are dealt with through components.
- * 
+ *
  * For example, you would add a {@link GridFieldPaginator} component to enable
  * pagination on the listed records, and configure it through {@link GridFieldPaginator->setItemsPerPage()}.
- * 
+ *
  * In order to reduce the amount of custom code required, the framework provides
  * some default configurations for common use cases:
  * - {@link GridFieldConfig_Base} (added by default to GridField)
@@ -15,30 +15,30 @@
  * - {@link GridFieldConfig_RelationEditor}
  */
 class AbcGridFieldConfig extends GridFieldConfig{
-	
+
 	/**
 	 *
-	 * @return GridFieldConfig 
+	 * @return GridFieldConfig
 	 */
 	public static function create(){
 		return new self;
 	}
-	
+
 	/**
 	 *
 	 * @var ArrayList
 	 */
 	protected $components = null;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public function __construct() {
 		$this->components = new ArrayList();
 	}
-	
+
 	/**
-	 * @param GridFieldComponent $component 
+	 * @param GridFieldComponent $component
 	 * @param string $insertBefore The class of the component to insert this one before
 	 */
 	public function addComponent(GridFieldComponent $component, $insertBefore = null) {
@@ -68,16 +68,16 @@ class AbcGridFieldConfig extends GridFieldConfig{
 		foreach($components as $component) $this->addComponent($component);
 		return $this;
 	}
-	
+
 	/**
-	 * @param GridFieldComponent $component 
+	 * @param GridFieldComponent $component
 	 * @return GridFieldConfig $this
 	 */
 	public function removeComponent(GridFieldComponent $component) {
 		$this->getComponents()->remove($component);
-		return $this;	
+		return $this;
 	}
-	
+
 	/**
 	 * @param String Class name or interface
 	 * @return GridFieldConfig $this
@@ -89,7 +89,7 @@ class AbcGridFieldConfig extends GridFieldConfig{
 		}
 		return $this;
 	}
-	
+
 	/**
 	 * @return ArrayList Of GridFieldComponent
 	 */
@@ -102,7 +102,7 @@ class AbcGridFieldConfig extends GridFieldConfig{
 
 	/**
 	 * Returns all components extending a certain class, or implementing a certain interface.
-	 * 
+	 *
 	 * @param String Class name or interface
 	 * @return ArrayList Of GridFieldComponent
 	 */
@@ -116,7 +116,7 @@ class AbcGridFieldConfig extends GridFieldConfig{
 
 	/**
 	 * Returns the first available component with the given class or interface.
-	 * 
+	 *
 	 * @param String ClassName
 	 * @return GridFieldComponent
 	 */
@@ -174,7 +174,7 @@ class AbcGridFieldConfig_RecordViewer extends GridFieldConfig_RecordViewer {
 }
 
 /**
- * 
+ *
  */
 class AbcGridFieldConfig_RecordEditor extends GridFieldConfig_RecordEditor {
 
@@ -192,7 +192,7 @@ class AbcGridFieldConfig_RecordEditor extends GridFieldConfig_RecordEditor {
 	 * @param int $itemsPerPage - How many items per page should show up
 	 */
 	public function __construct($itemsPerPage=null) {
-		
+
 		$this->addComponent(new GridFieldButtonRow('before'));
 		$this->addComponent(new GridFieldAddNewButton('buttons-before-left'));
 		$this->addComponent(new GridFieldToolbarHeader());
@@ -213,11 +213,11 @@ class AbcGridFieldConfig_RecordEditor extends GridFieldConfig_RecordEditor {
 
 /**
  * Similar to {@link GridFieldConfig_RecordEditor}, but adds features
- * to work on has-many or many-many relationships. 
+ * to work on has-many or many-many relationships.
  * Allows to search for existing records to add to the relationship,
  * detach listed records from the relationship (rather than removing them from the database),
  * and automatically add newly created records to it.
- * 
+ *
  * To further configure the field, use {@link getComponentByType()},
  * for example to change the field to search.
  * <code>
@@ -241,7 +241,7 @@ class AbcGridFieldConfig_RelationEditor extends GridFieldConfig_RelationEditor {
 	 * @param int $itemsPerPage - How many items per page should show up
 	 */
 	public function __construct($itemsPerPage=null) {
-		
+
 		$this->addComponent(new GridFieldButtonRow('before'));
 		$this->addComponent(new GridFieldAddNewButton('buttons-before-left'));
 		$this->addComponent(new GridFieldAddExistingAutocompleter('buttons-before-left'));

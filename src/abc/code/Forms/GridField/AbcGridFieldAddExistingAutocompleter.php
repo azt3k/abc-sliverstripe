@@ -1,19 +1,19 @@
 <?php
 
 class AbcGridFieldAddExistingAutocompleter extends GridFieldAddExistingAutocompleter {
-	
+
 	/**
 	 * Returns a json array of a search results that can be used by for example Jquery.ui.autosuggestion
 	 *
 	 * @param GridField $gridField
-	 * @param SS_HTTPRequest $request 
+	 * @param SS_HTTPRequest $request
 	 */
 	public function doSearch($gridField, $request) {
 		$dataClass = $gridField->getList()->dataClass();
 		$allList = DataList::create($dataClass);
 		$filters = array();
 		$stmts = array();
-		
+
 		$searchFields = ($this->getSearchFields()) ? $this->getSearchFields() : $this->scaffoldSearchFields($dataClass);
 		if(!$searchFields) {
 			throw new LogicException(
@@ -34,5 +34,5 @@ class AbcGridFieldAddExistingAutocompleter extends GridFieldAddExistingAutocompl
 		}
 		return Convert::array2json($json);
 	}
-	
+
 }
