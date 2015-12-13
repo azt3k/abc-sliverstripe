@@ -1,0 +1,21 @@
+ModelAdmin:
+  extensions:
+    - VersionedModelAdminUpdateFormExtension
+Image:
+  extensions:
+    - AbcImageExtension
+File:
+  extensions:
+    - AbcFileExtension
+LeftAndMain:
+  extensions:
+    - AbcLeftAndMainExtension
+SiteTree:
+  extensions:
+    - AbcSiteTreeExtension
+Security:
+  extensions:
+    - AbcSecurityExtension
+Controller:
+  extensions:
+    - AbcControllerExtension
