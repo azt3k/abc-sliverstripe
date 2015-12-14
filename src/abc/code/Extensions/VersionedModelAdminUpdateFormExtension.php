@@ -6,7 +6,7 @@
  *
  * @author Tim Klein, Dodat Ltd <tim[at]dodat[dot]co[dot]nz>
  */
-class VersionedModelAdminUpdateForm extends Extension {
+class VersionedModelAdminUpdateFormExtension extends Extension {
 
 	function onBeforeInit() {
 		Versioned::reading_stage('Stage');
