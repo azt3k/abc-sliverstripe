@@ -15,6 +15,7 @@ class AbcDB extends PDO{
 		// fix for sqlite dbs
 		$type = strtolower(str_replace('Database', '', $conf->type));
 		if ($type == 'sqlitepdo') $type = 'sqlite';
+		if ($type == 'mysqlpdo') $type = 'mysql';
 
 		// DSN
 		if (!$dsn) $dsn = $type . ':' . 'host='.$conf->server . ';' . 'dbname=' . $conf->database;
