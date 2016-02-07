@@ -1,6 +1,6 @@
 <?php
 
-class DataObjectHelper{
+class DataObjectHelper {
 
 	/*
 	 *	Stores a cache of the extension Map
@@ -13,6 +13,18 @@ class DataObjectHelper{
 	protected static function db_dialect() {
 		global $databaseConfig;
 		return $databaseConfig['type'];
+	}
+
+	public static function versioned_table($className) {
+
+		$stagedRes = (
+			singleton($className)->hasExtension('Versioned') &&
+			strtolower(Versioned::current_stage()) != 'stage'
+		)
+			? $className . '_' . ucfirst(strtolower(Versioned::current_stage()))
+			: $className;
+
+		return $stagedRes;
 	}
 
 	/*
