@@ -12,7 +12,7 @@ class HTMLTextExtension extends Extension {
 		$content = @$this->owner->__toString();
 
 		// return nothing if we have nothing
-		if !($content) return '';
+		if (!$content) return '';
 
 		// append thestuff dom doc adds incorrectly
 		$content = '<!doctype html><html><body>' . $content . '</body></html>';
