@@ -8,8 +8,11 @@ class HTMLTextExtension extends Extension {
 
 	public function FirstBlocks($num = 2) {
 
-		// get the Content
-		$content = (string) $this->owner;
+		// get the Content safely
+		$content = @$this->owner->__toString();
+
+		// return nothing if we have nothing
+		if !($content) return '';
 
 		// append thestuff dom doc adds incorrectly
 		$content = '<!doctype html><html><body>' . $content . '</body></html>';
