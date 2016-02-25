@@ -22,18 +22,16 @@ class HTMLTextExtension extends Extension {
 		@$dom->loadHTML($content);
 
 		// find the body fragment
-		$body = $dom->getElementsByTagName('body')[0];
+		$body = $dom->getElementsByTagName('body')->item(0);
 
 		// init the output string
 		$out = new DOMDocument();
 		$out->loadHTML('<!doctype html><html><body></body></html>');
-		$oBody = $out->getElementsByTagName('body')[0];
+		$oBody = $out->getElementsByTagName('body')->item(0);
 
 		// loop through nodes appending children to the output
 		$i = 0;
 		foreach ($body->childNodes as $node) {
-
-			// print_r($node);
 
 			// skip text nodes
 			if ($node->nodeName == '#text') continue;
