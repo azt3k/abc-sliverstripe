@@ -1,6 +1,14 @@
 <?php
 
-class DataObjectSearch extends Object {
+class DataObjectSearch extends Object implements Flushable {
+
+    /**
+     * [flush description]
+     * @return [type] [description]
+     */
+    public static function flush() {
+        SS_Cache::factory('DataObjectSearch')->clean(Zend_Cache::CLEANING_MODE_ALL);
+    }
 
     /**
     * @config
@@ -221,13 +229,13 @@ class DataObjectSearch extends Object {
             $sql = "
                 SELECT SQL_CALC_FOUND_ROWS ClassName, ID, SUM(weight) AS total_weight
                 FROM ((" . $sql . ")) AS t1
-                GROUP BY ID
+                GROUP BY ID, ClassName
                 ORDER BY total_weight DESC
                 LIMIT " . $start . "," . $limit . "
             ";
 
             // Get Data
-            // die('<br>' . $sql . '<br>');
+            // die($sql);
             $result = $db->query($sql);
             $result = $result ? $result->fetchAll(PDO::FETCH_OBJ) : array() ;
 
