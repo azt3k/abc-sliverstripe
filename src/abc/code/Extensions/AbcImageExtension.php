@@ -4,13 +4,13 @@ class AbcImageExtension extends DataExtension {
 
 	public static $fallback_image = null;
 
-	public static $db = array(
+	private static $db = array(
 		'CapturedBy'	=> 'Varchar(255)',
 		'Location'		=> 'Varchar(255)',
 		'DateCaptured'	=> 'Date'
 	);
 
-	public static $summary_fields = array(
+	private static $summary_fields = array(
 		'Title'			=> 'Title',
 		'Filename'		=> 'Filename',
 		'CMSThumbnail'	=> 'Preview'
@@ -28,7 +28,7 @@ class AbcImageExtension extends DataExtension {
 		$df = new DateField( 'DateCaptured', 'Date Captured (dd/mm/yyyy)' );
 		$df->setLocale('en_NZ');
 		$df->setConfig('dateformat', 'dd/MM/YYYY');
-		$df->setConfig('showcalendar','true'); 
+		$df->setConfig('showcalendar','true');
 		$fields->addFieldToTab( 'Root.Main', $df );
 
         return $fields;
