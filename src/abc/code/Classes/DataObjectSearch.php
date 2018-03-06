@@ -124,7 +124,7 @@ class DataObjectSearch extends Object implements Flushable {
      * @param  array  $fields [description]
      * @return [type]         [description]
      */
-    public static function weighted_search($className, $q, array $fields = array('Content' => 1,'Title' => 3), $start = 0, $limit = 10, $filterSql = null) {
+    public static function weighted_search($className, $q, array $fields = array('Content' => 1,'Title' => 3), $start = 0, $limit = 10, $filterSql = null, $filterUnionSql = null) {
 
         // sort out the cache
         $implodedArgs = $className . '_' . $q . '_' . implode('_', $fields) . '_' . $start . '_' . $limit  . '_' . $filterSql;
@@ -227,8 +227,9 @@ class DataObjectSearch extends Object implements Flushable {
             }
             // Add Limits and order to Query
             $sql = "
-                SELECT SQL_CALC_FOUND_ROWS ClassName, ID, SUM(weight) AS total_weight
+                SELECT SQL_CALC_FOUND_ROWS t1.ClassName, t1.ID, SUM(t1.weight) AS total_weight
                 FROM ((" . $sql . ")) AS t1
+                " . ($filterUnionSql != null ? $filterUnionSql : "") . "
                 GROUP BY ID, ClassName
                 ORDER BY total_weight DESC
                 LIMIT " . $start . "," . $limit . "
